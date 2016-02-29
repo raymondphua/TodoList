@@ -25,22 +25,104 @@
         <meta name="format-detection" content="telephone=no" />
         <meta name="msapplication-tap-highlight" content="no" />
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
+        <title>Todo List</title>
     </head>
     <body>
-        <div class="app">
-            <h1>PhoneGap</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+
+        <div data-role="page" id="main">
+
+            <!-- HEADER -->
+            <div data-role="header" data-theme="b">
+                <h1> TODO'S </h1>
+                <a href="#settings" class="ui-btn-right" data-role="button" data-icon="gear"> Settings </a>
             </div>
+
+            <!-- CONTENT -->    
+            <div role="content" class="ui-content">
+                <ul data-role="listview">
+                    <li><a href="#addTodoPage">Voeg een nieuwe TODO toe</a></li>
+                    <li><a href="#todoListPage">TODO lijst</a></li>
+                </ul>
+            </div>
+
+            <!-- FOOTER -->
+<!--             <div data-role="footer" data-position="fixed" data-theme="b">
+                <h4> footer </h4>
+            </div> -->
+        </div>
+
+        <div data-role="page" id="settings">
+
+            <!-- HEADER -->
+            <div data-role="header" data-theme="b">
+                <h1> SETTINGS </h1>
+                <a href="#main" class="ui-btn-left" data-role="button" data-icon="back"> Back </a>
+            </div>
+
+            <!-- CONTENT -->    
+            <div role="content" class="ui-content">
+                <label for="checkboxUser">TOON GEBRUIKER BIJ TODO:</label>
+                <input type="checkbox" data-role="flipswitch" name="checkboxUser" id="checkboxUser">
+
+                <label for="checkboxTime">TOON TIJD BIJ TODO:</label>
+                <input type="checkbox" data-role="flipswitch" name="checkboxTime" id="checkboxTime">
+            </div>
+
+            <!-- FOOTER -->
+<!--             <div data-role="footer" data-position="fixed" data-theme="b">
+                <h4> footer </h4>
+            </div> -->
+        </div>
+
+        <div data-role="page" id="addTodoPage">
+
+            <!-- HEADER -->
+            <div data-role="header" data-theme="b">
+                <h1> NEW TODO </h1>
+                <a href="#main" class="ui-btn-left" data-role="button" data-icon="back"> Back </a>
+            </div>
+
+            <!-- CONTENT -->    
+            <div role="content" class="ui-content">
+                <input type="text" name="user" id="inputUser" placeholder="user" value="">
+                <textarea name="description" id="inputDescription" placeholder="description"></textarea>
+                <button id="addTodo">Add</button>
+            </div>
+
+            <!-- FOOTER -->
+<!--             <div data-role="footer" data-position="fixed" data-theme="b">
+                <h4> footer </h4>
+            </div> -->
+        </div>
+
+        <div data-role="page" id="todoListPage">
+
+            <!-- HEADER -->
+            <div data-role="header" data-theme="b">
+                <h1> TODO'S </h1>
+                <a href="#main" class="ui-btn-left" data-role="button" data-icon="back"> Back </a>
+            </div>
+
+            <!-- CONTENT -->    
+            <div role="content" class="ui-content" id="todoList">
+                <ul data-role="listview">
+                </ul>
+            </div>
+
+            <!-- FOOTER -->
+<!--             <div data-role="footer" data-position="fixed" data-theme="b">
+                <h4> footer </h4>
+            </div> -->
         </div>
         <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+        <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
+        <!--<script type="text/javascript">
             app.initialize();
-        </script>
+        </script> -->
     </body>
 </html>

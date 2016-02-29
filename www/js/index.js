@@ -47,3 +47,125 @@ var app = {
         console.log('Received Event: ' + id);
     }
 };
+
+var id = 2;
+
+$(document).ready(function() {
+
+    addTodoButtonHandler();
+    checkUser();
+    checkTime();
+    //createTable();
+    //insertTestRow();
+    refreshTodoList();
+});
+
+function addTodoButtonHandler() {
+    $('#addTodo').on('click', function() {
+        id++;
+        var user = $('#inputUser').val();
+        var description = $('#inputDescription').val();
+
+        addNewTodo(user, description);
+    });
+}
+
+function checkUser() {
+    $('#checkboxUser').change(function() {
+        var checked = $('#checkboxUser').prop('checked');
+        window.localStorage.setItem("checkUser", checked);
+    });
+}
+
+function checkTime() {
+    $('#checkboxTime').change(function() {
+        var checked = $('#checkboxTime').prop('checked');
+        window.localStorage.setItem("checkTime", checked);
+    });
+}
+
+function refreshList() {
+    $('#checkUser').text(window.localStorage.getItem("checkUser"));
+    $('#checkTime').text(window.localStorage.getItem("checkTime"));
+}
+
+$(document).on('pagechange', function() {
+    refreshList();
+    refreshTodoList();
+});
+
+
+// DATABASE 
+var db = openDatabase('todo_db', '1.0', 'Phua\'s database', '2 * 1024 * 1024');
+
+function createTable() {
+    db.transaction(function(tx) {
+        //tx = transaction
+        //sql magic here
+        tx.executeSql('CREATE TABLE IF NOT EXISTS todo (id unique, user TEXT, description TEXT, time TEXT)');
+        alert('created table');
+    });
+}
+
+function insertTestRow() {
+    //insert test row
+    db.transaction(function(tx) {
+        tx.executeSql('INSERT INTO todo (id, user, description, time) VALUES (1, "raymondphua", "huiswerk maken", "28-02-2016 22:00")');
+        tx.executeSql('INSERT INTO todo (id, user, description, time) VALUES (2, "raymondphua", "huiswerk maken numero 2", "28-02-2016 22:20")');
+        alert('inserted rows');
+    });
+}
+
+function addNewTodo(user, description) {
+    //insert new todo row
+    db.transaction(function(tx) {
+        tx.executeSql('INSERT INTO todo (id, user, description, time) VALUES (?, ?, ?, "Test tijd moet nog gedaan worden")', [id, user, description]); 
+    });
+
+    $.mobile.changePage("#todoListPage", {
+        transition: "pop",
+        changeHash: false
+    });
+}
+
+function refreshTodoList() {
+    //get all rows
+    db.transaction(function(tx) {
+        tx.executeSql('SELECT * FROM todo', [], function (tx, results) {
+          var len = results.rows.length, i;
+          var ul = $('#todoList ul');
+          var userChecked = window.localStorage.getItem("checkUser");
+          var timeChecked = window.localStorage.getItem("checkTime");
+          ul.empty();
+          for (i = 0; i < len; i++) {
+            if (userChecked && timeChecked) {
+                ul.append(  '<li>' +
+                                '<label id="todoId">' + results.rows.item(i).id + '</labeL>' +
+                                '<label id="todoUser">' + results.rows.item(i).user + '</label>' +
+                                '<label id="todoDescription">' + results.rows.item(i).description + '</label>' +
+                                '<label id="todoTime">' + results.rows.item(i).time + '</label>' + 
+                            '</li>');
+                //alert(results.rows.item(i).description);
+            } else if (userChecked) {
+                ul.append(  '<li>' +
+                                '<label id="todoId">' + results.rows.item(i).id + '</labeL>' +
+                                '<label id="todoUser">' + results.rows.item(i).user + '</label>' +
+                                '<label id="todoDescription">' + results.rows.item(i).description + '</label>' +
+                            '</li>');
+            } else if (timeChecked) {
+                ul.append(  '<li>' +
+                                '<label id="todoId">' + results.rows.item(i).id + '</labeL>' +
+                                '<label id="todoDescription">' + results.rows.item(i).description + '</label>' +
+                                '<label id="todoTime">' + results.rows.item(i).time + '</label>' + 
+                            '</li>');
+            } else {
+                ul.append(  '<li>' +
+                                '<label id="todoId">' + results.rows.item(i).id + '</labeL>' +
+                                '<label id="todoDescription">' + results.rows.item(i).description + '</label>' +
+                            '</li>');
+            }
+          }
+          ul.listview('refresh');
+        });
+    });
+}
